@@ -15,3 +15,6 @@
 	.eqv READ_INTEGER 5
 	
 	.eqv LINEA 1
+	.eqv CIRCULO 2
+	.eqv SALIR 3
+	.eqv LIMPIAR 4
