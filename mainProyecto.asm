@@ -180,14 +180,37 @@ actualizarSy:
 finDibujarLinea:
     j loop
 
-dibujarCirculo:
-   
 
-    # Inicializar valores para el algoritmo de Bresenham para circulos
-    li t3, 0       # x = 0
-    mv t4, t2      # y = r
-    li t6, 1       # err = 1
-    sub t6, t6, t2 # err = 1 - r
+pedirPuntosCirculo:
+	imprimirCadena msgCirculo
+
+	# Pedir x (centro)
+	imprimirCadena msgX
+	li a7, READ_INTEGER
+	ecall
+	mv t0, a0  # Guardar x del centro
+
+	# Pedir y (centro)
+	imprimirCadena msgY
+	li a7, READ_INTEGER
+	ecall
+	mv t1, a0  # Guardar y del centro
+
+	# Pedir radio
+	imprimirCadena msgR
+	li a7, READ_INTEGER
+	ecall
+	mv t2, a0  # Guardar radio
+	
+	# Inicializar valores para el algoritmo de Bresenham para circulos
+    	li t3, 0       # x = 0
+    	mv t4, t2      # y = r
+    	li t6, 1       # err = 1
+    	sub t6, t6, t2 # err = 1 - r
+
+
+
+
 
 bresenhamCirculo:
 
@@ -219,8 +242,8 @@ finDibujarCirculo:
     j loop
 
 pintarPixelesCirculo:
-    # Dibujar p�xeles en los ocho octantes
-    li a1, 0x10010000  # Direcci�n base del bitmap
+    # Dibujar pixeles en los ocho octantes
+    li a1, 0x10010000  # Direccion base del bitmap
     li a2, 512         # Ancho del bitmap
 
     # Octante 1
@@ -228,8 +251,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 + y) * width + x0 + x
     add a4, a4, t3
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     li a0, 0xFFFFFF  # Color blanco
     sw a0, 0(a4)
 
@@ -238,8 +261,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 - y) * width + x0 + x
     add a4, a4, t3
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 3
@@ -247,8 +270,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 + y) * width + x0 - x
     sub a4, a4, t3
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 4
@@ -256,8 +279,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 - y) * width + x0 - x
     sub a4, a4, t3
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 5
@@ -265,8 +288,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 + x) * width + x0 + y
     add a4, a4, t4
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 6
@@ -274,8 +297,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 - x) * width + x0 + y
     add a4, a4, t4
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 7
@@ -283,8 +306,8 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 + x) * width + x0 - y
     sub a4, a4, t4
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
     # Octante 8
@@ -292,73 +315,28 @@ pintarPixelesCirculo:
     mul a4, a3, a2
     add a4, a4, t0  # (y0 - x) * width + x0 - y
     sub a4, a4, t4
-    slli a4, a4, 2  # Direcci�n * 4
-    add a4, a1, a4  # Direcci�n base + desplazamiento
+    slli a4, a4, 2  # Direccion * 4
+    add a4, a1, a4  # Direccion base + desplazamiento
     sw a0, 0(a4)
 
-    jr ra  # Retornar de la funci�n
-
-
-
-
-
-
-
-
-
-
-
-	
-pedirPuntosCirculo:
-	imprimirCadena msgCirculo
-
-	# Pedir x (centro)
-	imprimirCadena msgX
-	li a7, READ_INTEGER
-	ecall
-	mv t0, a0  # Guardar x del centro
-
-	# Pedir y (centro)
-	imprimirCadena msgY
-	li a7, READ_INTEGER
-	ecall
-	mv t1, a0  # Guardar y del centro
-
-	# Pedir radio
-	imprimirCadena msgR
-	li a7, READ_INTEGER
-	ecall
-	mv t2, a0  # Guardar radio
-	
-	# Inicializar valores para el algoritmo de Bresenham para c�rculos
-    	li t3, 0       # x = 0
-    	mv t4, t2      # y = r
-    	li t6, 1       # err = 1
-    	sub t6, t6, t2 # err = 1 - r
-
-
-
+    jr ra  # Retornar de la funcion
 
 
 
 limpiarBitMap:
-    li a0, 0x10010000  # Direcci�n base del bitmap
+    li a0, 0x10010000  # Direccion base del bitmap
     li a1, 0           # Color de fondo (negro)
-    li a2, 262144      # Tama�o del bitmap (asumiendo 512x512 p�xeles)
-    li a3, 0           # Contador de p�xeles
+    li a2, 262144      # Tama�o del bitmap (asumiendo 512x512 pixeles)
+    li a3, 0           # Contador de pixeles
     
 limpiarLoop:
-    sw a1, 0(a0)       # Establecer el color del p�xel actual
-    addi a0, a0, 4     # Avanzar a la siguiente direcci�n de p�xel
-    addi a3, a3, 1     # Incrementar el contador de p�xeles
-    blt a3, a2, limpiarLoop # Repetir hasta que todos los p�xeles est�n limpios
-
+    sw a1, 0(a0)       # Establecer el color del pixel actual
+    addi a0, a0, 4     # Avanzar a la siguiente direccion de pixel
+    addi a3, a3, 1     # Incrementar el contador de pixeles
+    blt a3, a2, limpiarLoop # Repetir hasta que todos los pixeles estan limpios
     j loop  # Volver al bucle principal
 
 fin:
 	# Salida del programa
 	li a7, EXIT
 	ecall
-
-
-
